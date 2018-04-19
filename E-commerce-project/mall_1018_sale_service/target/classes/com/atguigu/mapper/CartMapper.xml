@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper SYSTEM "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.atguigu.mapper.CartMapper">
+	<select id="select_cart_exist" resultType="int">
+		select count(1) from t_mall_shoppingCar where sku_id =
+		#{sku_id} and yh_id = #{yh_id}
+	</select>
+
+	<!-- 启用主键返回策略 -->
+	<insert id="add_cart" useGeneratedKeys="true" keyColumn="id"
+		keyProperty="id">
+		insert into
+		t_mall_shoppingcar(sku_mch,sku_jg,tjshl,hj,yh_id,shp_id,chjshj,sku_id,shp_tp,shfxz,kcdz)
+		values(#{sku_mch},#{sku_jg},#{tjshl},#{hj},#{yh_id},#{shp_id},#{chjshj},#{sku_id},#{shp_tp},#{shfxz},#{kcdz})
+	</insert>
+
+	<update id="update_cart">
+		update t_mall_shoppingcar
+		<set>
+		<if test="tjshl!=0">
+			tjshl = #{tjshl},
+		</if>
+		<if test="hj!=0">
+			hj = #{hj},
+		</if>
+		<if test="shfxz!=null and shfxz!=''">
+			shfxz = #{shfxz},
+		</if>
+		</set>
+		where sku_id = #{sku_id}
+		<if test="yh_id != 0">
+			and yh_id = #{yh_id}
+		</if>
+	</update>
+	
+	<select id="select_list_cart_by_user" resultType="com.atguigu.bean.T_MALL_SHOPPINGCAR">
+		select * from t_mall_shoppingcar where yh_id = #{id}
+	</select>
+</mapper>

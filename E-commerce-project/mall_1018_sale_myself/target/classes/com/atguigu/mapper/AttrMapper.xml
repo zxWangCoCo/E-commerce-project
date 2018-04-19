@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper SYSTEM "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.atguigu.mapper.AttrMapper">
+	
+	<insert id="insert_attr" useGeneratedKeys="true" keyColumn="id" keyProperty="attr.id">
+		insert into t_mall_attr(flbh2,shxm_mch)
+		values(#{calss_2_id},#{attr.shxm_mch})
+	</insert>
+	
+	<insert id="insert_values" >
+		insert into t_mall_value(shxzh,shxm_id,shxzh_mch)
+		values
+		<foreach collection="list_value" item="value" separator=",">
+			(#{value.shxzh},#{attr_id},#{value.shxzh_mch})
+		</foreach>
+	</insert>
+	
+	<!-- 分步查询 --><!-- id,shxm_mch -->
+	<select id="select_attr_list" resultMap="com1">
+		select * from t_mall_attr where flbh2 = #{flbh2}
+	</select>
+	<resultMap type="com.atguigu.bean.OBJECT_T_MALL_ATTR" id="com1" autoMapping="true">
+		<id column="id" property="id" />
+		<result column="shxm_mch" property="shxm_mch"/>
+		<collection property="list_value" select="com.atguigu.mapper.AttrMapper.select_value_list"
+		column="id"></collection>
+	</resultMap>
+	
+	<select id="select_value_list" resultType="com.atguigu.bean.T_MALL_VALUE">
+		select * from t_mall_value where shxm_id in (#{id})
+	</select>
+</mapper>
